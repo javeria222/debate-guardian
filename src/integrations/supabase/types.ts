@@ -14,16 +14,309 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      debate_messages: {
+        Row: {
+          content: string
+          created_at: string
+          debate_id: string
+          id: string
+          is_ai_response: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          debate_id: string
+          id?: string
+          is_ai_response?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          debate_id?: string
+          id?: string
+          is_ai_response?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debate_messages_debate_id_fkey"
+            columns: ["debate_id"]
+            isOneToOne: false
+            referencedRelation: "debates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debate_participants: {
+        Row: {
+          debate_id: string
+          id: string
+          joined_at: string
+          score: number | null
+          side: string | null
+          user_id: string
+        }
+        Insert: {
+          debate_id: string
+          id?: string
+          joined_at?: string
+          score?: number | null
+          side?: string | null
+          user_id: string
+        }
+        Update: {
+          debate_id?: string
+          id?: string
+          joined_at?: string
+          score?: number | null
+          side?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debate_participants_debate_id_fkey"
+            columns: ["debate_id"]
+            isOneToOne: false
+            referencedRelation: "debates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debate_summaries: {
+        Row: {
+          debate_id: string
+          generated_at: string
+          id: string
+          key_arguments: Json | null
+          strengths_weaknesses: Json | null
+          summary: string
+        }
+        Insert: {
+          debate_id: string
+          generated_at?: string
+          id?: string
+          key_arguments?: Json | null
+          strengths_weaknesses?: Json | null
+          summary: string
+        }
+        Update: {
+          debate_id?: string
+          generated_at?: string
+          id?: string
+          key_arguments?: Json | null
+          strengths_weaknesses?: Json | null
+          summary?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debate_summaries_debate_id_fkey"
+            columns: ["debate_id"]
+            isOneToOne: true
+            referencedRelation: "debates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          current_participants: number | null
+          description: string | null
+          ended_at: string | null
+          id: string
+          max_participants: number | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: Database["public"]["Enums"]["debate_status"]
+          title: string
+          topic: string
+          updated_at: string
+          winner_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          current_participants?: number | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          max_participants?: number | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["debate_status"]
+          title: string
+          topic: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          current_participants?: number | null
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          max_participants?: number | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["debate_status"]
+          title?: string
+          topic?: string
+          updated_at?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
+      fact_checks: {
+        Row: {
+          checked_at: string
+          claim: string
+          confidence_score: number | null
+          explanation: string | null
+          id: string
+          message_id: string
+          sources: string[] | null
+          status: Database["public"]["Enums"]["fact_check_status"]
+        }
+        Insert: {
+          checked_at?: string
+          claim: string
+          confidence_score?: number | null
+          explanation?: string | null
+          id?: string
+          message_id: string
+          sources?: string[] | null
+          status?: Database["public"]["Enums"]["fact_check_status"]
+        }
+        Update: {
+          checked_at?: string
+          claim?: string
+          confidence_score?: number | null
+          explanation?: string | null
+          id?: string
+          message_id?: string
+          sources?: string[] | null
+          status?: Database["public"]["Enums"]["fact_check_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fact_checks_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "debate_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logical_fallacies: {
+        Row: {
+          detected_at: string
+          explanation: string
+          fallacy_name: string
+          id: string
+          message_id: string
+        }
+        Insert: {
+          detected_at?: string
+          explanation: string
+          fallacy_name: string
+          id?: string
+          message_id: string
+        }
+        Update: {
+          detected_at?: string
+          explanation?: string
+          fallacy_name?: string
+          id?: string
+          message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logical_fallacies_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "debate_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          credibility_score: number | null
+          debates_participated: number | null
+          debates_won: number | null
+          id: string
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          debates_participated?: number | null
+          debates_won?: number | null
+          id?: string
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          debates_participated?: number | null
+          debates_won?: number | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
+      debate_status: "waiting" | "active" | "completed" | "cancelled"
+      fact_check_status: "verified" | "unverified" | "incorrect" | "pending"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +443,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      debate_status: ["waiting", "active", "completed", "cancelled"],
+      fact_check_status: ["verified", "unverified", "incorrect", "pending"],
+    },
   },
 } as const
